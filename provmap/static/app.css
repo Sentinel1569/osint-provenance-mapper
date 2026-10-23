@@ -1,0 +1,17 @@
+:root { --g-direct: #3fa7d6; --g-trans: #9aa4b2; }
+#graph svg { width: 100%; height: 100%; display: block; }
+#graph .link { stroke: var(--border); stroke-width: 1.2; }
+#graph .link.hot { stroke: var(--bad); stroke-width: 2.6; }
+#graph .node circle { stroke: var(--panel); stroke-width: 1.5; cursor: pointer; }
+#graph .node.signal circle { stroke: var(--hyp); stroke-width: 2.5; }
+#graph .node.dev circle { stroke-dasharray: 3 2; stroke: var(--muted); }
+#graph .node text { font-size: 9.5px; fill: var(--text); pointer-events: none; paint-order: stroke; stroke: var(--panel-2); stroke-width: 3px; }
+#graph.focused .node:not(.hot) { opacity: .18; }
+#graph.focused .link:not(.hot) { opacity: .12; }
+.f { padding: 8px 6px; border-bottom: 1px solid var(--border); cursor: pointer; color: var(--text); }
+.f:hover, .f.active { background: var(--panel-2); }
+.sev { font-weight: 700; text-transform: uppercase; font-size: 11px; }
+.sev-critical, .sev-high { color: var(--bad); } .sev-medium { color: var(--warn); } .sev-low { color: var(--info); }
+.path { font-family: var(--mono); font-size: 12px; padding: 4px 0; }
+.path .arrow { color: var(--muted); margin: 0 4px; }
+.path .vuln { color: var(--bad); font-weight: 700; }

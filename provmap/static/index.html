@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Software Provenance Mapper</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%237b4bc4%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/base.css">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header class="top">
+  <div class="logo" style="background:#7b4bc4">PM</div>
+  <div><h1>Software Provenance Mapper</h1><div class="sub">How vulnerable dependencies reach your project, and who publishes what you run</div></div>
+  <div class="spacer"></div>
+  <button id="theme" class="ghost sm">◐ Theme</button>
+</header>
+<main>
+  <div class="grid cols-side">
+    <aside class="grid" style="align-content:start">
+      <section class="card">
+        <h2>Lockfile</h2>
+        <input id="file" type="file" accept=".json,.lock,.txt">
+        <div class="hint">package-lock.json (v1–v3), poetry.lock, Cargo.lock or a pinned requirements.txt. Only package names and versions are sent to OSV and the registries.</div>
+        <label for="prov">Provenance lookups</label>
+        <select id="prov">
+          <option value="auto">Auto (all if ≤150 packages, else direct + vulnerable)</option>
+          <option value="direct">Direct + vulnerable only</option>
+          <option value="all">All packages</option>
+          <option value="none">None (vulnerabilities only)</option>
+        </select>
+        <div class="row" style="margin-top:12px"><button id="scan">Analyse</button><button id="demo" class="ghost">Load demo</button></div>
+      </section>
+      <section class="card" id="exportCard" hidden>
+        <h2>Export</h2>
+        <div class="row"><button class="ghost sm" data-exp="report.md">Report (.md)</button><button class="ghost sm" data-exp="findings.csv">Findings (.csv)</button><button class="ghost sm" id="dlJson">JSON</button></div>
+      </section>
+      <section class="card">
+        <h2>Findings</h2>
+        <div id="findings" class="small muted">No analysis yet.</div>
+      </section>
+    </aside>
+
+    <div class="grid" style="align-content:start">
+      <div id="msg"></div>
+      <div class="grid cols-4" id="stats" hidden></div>
+      <section class="card">
+        <div class="row" style="margin-bottom:8px">
+          <h2 style="margin:0">Dependency graph</h2>
+          <span class="shrink small muted" id="focusLabel">Click a finding to trace its propagation paths</span>
+          <button id="clear" class="ghost sm shrink">Clear focus</button>
+        </div>
+        <div id="graph" class="graph"><div class="empty" style="margin:40px">Analyse a lockfile or load the demo.</div></div>
+        <div class="legend">
+          <span><i style="background:var(--accent)"></i>Project</span>
+          <span><i style="background:var(--g-direct)"></i>Direct</span>
+          <span><i style="background:var(--g-trans)"></i>Transitive</span>
+          <span><i style="background:var(--bad)"></i>Critical / high advisory</span>
+          <span><i style="background:var(--warn)"></i>Medium / low advisory</span>
+          <span><i style="border:2px solid var(--hyp);background:transparent"></i>Provenance signal</span>
+          <span><i style="border:1px dashed var(--muted);background:transparent"></i>Dev only</span>
+        </div>
+      </section>
+      <section class="card" id="pathCard" hidden><h2>Propagation</h2><div id="paths"></div></section>
+      <section class="card">
+        <div class="tabs" id="tabs">
+          <button data-tab="blast" class="active">Blast radius</button>
+          <button data-tab="signals">Provenance signals</button>
+          <button data-tab="packages">All packages</button>
+        </div>
+        <div id="tab" class="scroll"></div>
+      </section>
+    </div>
+  </div>
+</main>
+<script src="/static/vendor/d3.min.js"></script>
+<script src="/static/base.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
